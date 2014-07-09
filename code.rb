@@ -21,7 +21,7 @@ end
 
 Jury = Struct.new(:name, :gender) do
   def rate(actor, text)
-    return rand(7..10) if gender == "male" && actor.gender == "female" && (18..25).include(actor.age)
+    return rand(7..10) if gender == "male" && actor.gender == "female" && (18..25).include?(actor.age)
     return rand(0..7) if gender == "female" && text.split.size < 30
     rand(0..10)
   end
