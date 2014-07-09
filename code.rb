@@ -19,9 +19,9 @@ class Actor
   
 end
 
-Jury = Struct.new(:name, :age_range, :gender) do
+Jury = Struct.new(:name, :gender) do
   def rate(actor, text)
-    return rand(7..10) if gender == "male" && actor.gender == "female"
+    return rand(7..10) if gender == "male" && actor.gender == "female" && (18..25).include(actor.age)
     return rand(0..7) if gender == "female" && text.split.size < 30
     rand(0..10)
   end
@@ -29,9 +29,8 @@ end
 
 Act = Struct.new(:theme, :duration, :text) do
   def play(actor, role, *jury)
-     if actor.fit?(role) && actor.tried_roles[role.name] == nil
-       point = 0
-       jury.each { |jud| point += jud.rate(actor, text) }
+     if actor.fit?(role) && actor.tried_roles[role.name].nil?
+       point = jury.inject(1) {|sum, jud| sum += jud.rate(actor, text) }
        actor.duration_all += duration
        actor.tried_roles[role.name] = point / jury.size
      else
